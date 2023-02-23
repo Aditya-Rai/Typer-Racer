@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Typer Racer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+ 
+
+</head>
+
+<body class = "container">
+    <video id="video-bg" autoplay muted loop>
+        <source src="https://test4you.in/wordpress_api_demo/wp-content/uploads/2022/11/video.mp4" type="video/mp4">
+      </video>
+
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand border" href="#">
+                <img src="../static/logo.jpeg" alt="" width="280" height="80">
+            </a>
+        </div>
+    </nav>
+
+    <!-- <div class="jumbotron"> -->
+    <h1 class="border">Typer Racer</h1>
+    <div class = "center">
+        <!-- <div class="container text-center"> -->
+        <div class = "center">
+
+            <form method="post" , action="/submit" id="myForm" class = "container">
+
+
+                <p id="countdown_show">Start typing to start the countdown</p>
+                <input type="hidden" id="countdown" name="countdown" value="" />
+
+                <input type="hidden" id="total_count" name="total_count" value="" />
+
+                <label for="name">Name:</label>
+                <input class = "only_transparent" type="text" id="name" name="name" required><br>
+                <label for="email">Email:</label>
+                <input class = "only_transparent" type="email" id="email" name="email" required><br>
+
+                <p>Enter the following paragraph </p>
+                <p id="para" name="para"> {{para}}</p>
+                <textarea class = "only_transparent" name="user_input" id="user_input" cols="100" rows="10"
+                    placeholder="Enter the above paragraph here:"></textarea><br>
+                <input type="submit" class="btn btn-lg transparent" value="Submit">
+            </form>
+
+
+            <form action="/" class = "container">
+
+                <input type="submit" class="btn btn-lg transparent" value="Restart">
+
+            </form>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        const paragraph = document.getElementById("para");
+        const userInput = document.getElementById("user_input");
+        const totalCountElement = document.getElementById("total_count");
+        totalCountElement.value = 0
+
+        let characterCount = 0;
+        let backspaceCount = 0;
+
+
+        var timeLeft = 60;
+        var timer;
+
+        userInput.addEventListener("input", function () {
+            if (!timer) {
+                timer = setInterval(function () {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        document.getElementById("myForm").submit();
+                    } else {
+                        document.getElementById('countdown').value = timeLeft;
+                        document.getElementById("countdown_show").innerHTML = timeLeft + " seconds remaining";
+                        timeLeft--;
+                    }
+                }, 1000);
+            }
+
+
+            const userInputValue = userInput.value.trim();
+            const paragraphText = paragraph.textContent.trim();
+
+            let newHtml = "";
+
+            for (let i = 0; i < paragraphText.length; i++) {
+            const paragraphChar = paragraphText.charAt(i);
+            const userChar = userInputValue.charAt(i);
+
+            if (userChar && userChar === paragraphChar) {
+                newHtml += `<span style="color:green">${paragraphChar}</span>`;
+                } else {
+                newHtml += paragraphChar;
+            }
+            }
+
+            paragraph.innerHTML = newHtml;
+            
+            characterCount = userInputValue.length;
+            
+            const total = characterCount + backspaceCount;
+            totalCountElement.value = total           
+        });
+        
+        
+        userInput.addEventListener("keydown", (event) => {
+            const keyCode = event.keyCode || event.which;
+            if (keyCode === 8) {
+                backspaceCount++;
+            }
+        });
+
+    </script>
+</body>
+</html>

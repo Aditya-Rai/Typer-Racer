@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Typer Racer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../static/style.css">
+  <style>
+    .border {
+      margin: auto;
+      margin-bottom: 45px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+    }
+
+     th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    /*th {
+      background-color: transparent;
+      font-weight: bold;
+      color: white
+    }
+
+    tr:nth-child(even) {
+      background-color: transparent;
+      font-weight: bold;
+      color: white
+    } */
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+
+</head>
+
+<body>
+  <video id="video-bg" autoplay muted loop>
+    <source src="https://test4you.in/wordpress_api_demo/wp-content/uploads/2022/11/video.mp4" type="video/mp4">
+  </video>
+
+  <nav class="container">
+    <div class="container">
+      <a class="navbar-brand border" href="#">
+        <img src="../static/logo.jpeg" alt="" width="280" height="80">
+      </a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="container">
+      <h1 class="">Result</h1>
+
+
+      <!-- <p>Typing time</p> -->
+      <p id="correct_words">Your Typing speed is {{typing_speed}}</p>
+      <p>Your Typing accuracy is {{accuracy}}</p>
+      <p>You Position in the Leader board is {{position}}</p>
+
+      <form method="" , action="/" id="" class="container">
+        <input type="submit" class="btn btn-lg transparent" value="Back to Home">
+      </form>
+
+      <button id="load-data" class="btn btn-lg transparent">Load Data</button>
+    </div>
+    <!-- <input id="load-data" type="" class="btn btn-lg transparent" value="Leaderboard"> -->
+    <table id="my-table"></table>
+    <script>
+      // Add an event listener to the button that will load the CSV file and display it in the table
+      document.getElementById('load-data').addEventListener('click', function () {
+        Papa.parse('../static/top_players.csv', {
+          download: true,
+          header: true,
+          complete: function (results) {
+            // Create a new table row for each row of data
+            var tableHtml = '<tr>';
+            Object.keys(results.data[0]).forEach(function (colName) {
+              tableHtml += '<th>' + colName + '</th>';
+            });
+            tableHtml += '</tr>';
+            results.data.forEach(function (row) {
+              var rowHtml = '<tr>';
+              Object.keys(row).forEach(function (colName) {
+                rowHtml += '<td>' + row[colName] + '</td>';
+              });
+              rowHtml += '</tr>';
+              tableHtml += rowHtml;
+            });
+
+            // Add the HTML to the table
+            var tableElement = document.getElementById('my-table');
+            tableElement.innerHTML = tableHtml;
+          }
+        });
+      });
+    </script>
+
+
+<img src="https://www.crio.do/blog/content/images/2021/04/elevator.gif" alt="Cool GIF">
+  </div>
+
+</body>
+
+</html>
+
